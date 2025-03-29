@@ -12,6 +12,9 @@ class Product:
         self.quantity = quantity
         self.active = True
 
+    def __str__(self):
+        return f"{self.name} - ${self.price}, Quantity: {self.quantity}"
+
     def get_quantity(self) -> int:
         return self.quantity
 
