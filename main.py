@@ -1,4 +1,4 @@
-import products
+import products  # Stelle sicher, dass das Modul korrekt importiert wird
 import store
 
 
@@ -29,11 +29,11 @@ def start(store_obj):
 
 
 def make_order(store_obj):
-    products = store_obj.get_all_products()
+    products_list = store_obj.get_all_products()
     order_list = []
 
     print("\n------")
-    for index, product in enumerate(products, start=1):
+    for index, product in enumerate(products_list, start=1):
         print(f"{index}. {product}")
     print("------\n")
 
@@ -44,29 +44,44 @@ def make_order(store_obj):
 
         try:
             product_index = int(choice) - 1
-            if 0 <= product_index < len(products):
+            if 0 <= product_index < len(products_list):
+                selected_product = products_list[product_index]
                 amount = int(input("What amount do you want? "))
-                order_list.append((products[product_index], amount))
-                print("Product added to list!\n")
+                if amount > selected_product.quantity:
+                    print(
+                        f"Not enough stock available for {selected_product.name}. Available: {selected_product.quantity}\n")
+                elif amount <= 0:
+                    print("Please enter a valid quantity greater than 0.\n")
+                else:
+                    order_list.append((selected_product, amount))
+                    print("Product added to list!\n")
             else:
                 print("Invalid product number, try again!\n")
         except ValueError:
             print("Invalid input, please enter a number!\n")
 
     if order_list:
-        total_cost = store_obj.order(order_list)
-        print(f"Order placed! Total cost: ${total_cost}")
+        try:
+            total_cost = store_obj.order(order_list)
+            print(f"Order placed! Total cost: ${total_cost}")
+        except ValueError as e:
+            print(f"Order failed: {e}")
     else:
         print("No items selected, order cancelled.")
 
 
-product_list = [
-    products.Product("MacBook Air M2", price=1450, quantity=100),
-    products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-    products.Product("Google Pixel 7", price=500, quantity=250)
-]
+def main():
+    # setup initial stock of inventory
+    product_list = [
+        products.Product("MacBook Air M2", price=1450, quantity=100),
+        products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
+        products.Product("Google Pixel 7", price=500, quantity=250)
+    ]
 
-best_buy = store.Store(product_list)
+    best_buy = store.Store(product_list)
+    start(best_buy)
 
-start(best_buy)
+
+if __name__ == "__main__":
+    main()
 
