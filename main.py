@@ -1,4 +1,4 @@
-import products  # Stelle sicher, dass das Modul korrekt importiert wird
+import products
 import store
 
 
@@ -71,7 +71,6 @@ def make_order(store_obj):
 
 
 def main():
-    # setup initial stock of inventory
     product_list = [
         products.Product("MacBook Air M2", price=1450, quantity=100),
         products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
